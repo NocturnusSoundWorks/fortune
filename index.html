@@ -1,589 +1,86 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>やさしい星座占い</title>
-<style>
-body {
-  margin: 0;
-  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  <meta charset="UTF-8">
+  <title>うんラボ</title>
 
-  background-image: url("hakei.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  <style>
+    :root{
+      --accent:#81D8D0; /* ティファニーブルー */
+      --gold:#d4b15a;
+    }
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  color: #eee;
-}
+    body{
+      margin:0;
+      font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+      background:#fff;
+      color:#444;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      text-align:center;
+    }
 
+    .wrap{
+      max-width:700px;
+      padding:40px;
+    }
 
-/* ===== メインカード ===== */
-.container {
-  background: rgba(10, 12, 30, 0.75);
-  backdrop-filter: blur(12px);
-  padding: 26px;
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(120, 120, 255, 0.25);
-  width: 95%;
-  max-width: 420px;
-  border: 1px solid rgba(255,255,255,0.08);
-}
+    .catch{
+      font-size:14px;
+      color:var(--gold);
+      margin-bottom:10px;
+      letter-spacing:.05em;
+    }
 
-/* ===== タイトル ===== */
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: #dcd6ff;
-  text-shadow: 0 0 10px rgba(150,150,255,0.5);
-}
+    h1{
+      font-size:42px;
+      margin:0 0 10px;
+      color:var(--accent);
+    }
 
-/* ===== 入力 ===== */
-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.15);
-  font-size: 14px;
-  box-sizing: border-box;
-  background: rgba(255,255,255,0.05);
-  color: white;
-}
+    .lead{
+      font-size:16px;
+      line-height:1.8;
+      margin:20px 0 30px;
+    }
 
-/* ===== ボタン ===== */
-button {
-  width: 100%;
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  color: white;
-  background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-  box-shadow: 0 0 20px rgba(168,85,247,0.5);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-　margin-top: 14px; 
-}
+    button{
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:14px 30px;
+      font-size:16px;
+      border-radius:999px;
+      cursor:pointer;
+      transition:.3s;
+    }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(236,72,153,0.8);
-}
-
-/* ===== 結果表示 ===== */
-#output {
-  margin-top: 20px;
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-/* ===== 各運勢 ===== */
-#output p {
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-/* ===== 星評価 ===== */
-.star {
-  color: #ffd166;
-  text-shadow: 0 0 8px rgba(255,209,102,0.8);
-}
- 
-.titleLine {
-  font-size: 1.25em;
-}
-
-
-input, select {
-  margin-bottom: 12px;
-}
-
-/* =========================
-   背景のゆっくりした動き
-========================= */
-body {
-  animation: bgMove 20s ease infinite alternate;
-}
-
-@keyframes bgMove {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(15deg); }
-}
-
-/* =========================
-   結果のフェードイン
-========================= */
-#output {
-  opacity: 0;
-  transform: translateY(20px);   /* 少し下に置いておく */
-  animation: fadeInUp 3.2s ease forwards;
-  animation-delay: 1.5s;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =========================
-   各カードを少し遅れて表示
-========================= */
-#output p {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: rise 0.6s ease forwards;
-}
-
-#output p:nth-child(1) { animation-delay: 0.1s; }
-#output p:nth-child(2) { animation-delay: 0.2s; }
-#output p:nth-child(3) { animation-delay: 0.3s; }
-#output p:nth-child(4) { animation-delay: 0.4s; }
-#output p:nth-child(5) { animation-delay: 0.5s; }
-
-@keyframes rise {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =========================
-   星のきらめき
-========================= */
-.star {
-  z-index: 2;
-  filter: drop-shadow(0 0 6px white);
-  animation: sparkle 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes sparkle {
-  from { text-shadow: 0 0 5px rgba(255,209,102,0.5); }
-  to   { text-shadow: 0 0 15px rgba(255,209,102,1); }
-}
-
-/* =========================
-   水晶
-========================= */
-#crystal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at center, rgba(10,10,30,0.4), rgba(0,0,0,0.85));
-  backdrop-filter: blur(6px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 2s ease;
-  z-index: 999;
-}
-
-#crystal.show {
-  opacity: 1;
-}
-
-/* 本体 */
-.orb {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffffff, #9fd3ff 40%, #5e8cff 70%, #2b3a73);
-  position: absolute;
-  animation: float 3s ease-in-out infinite;
-}
-
-/* 外側の発光 */
-.glow {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(120,170,255,0.4), transparent 70%);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.1); opacity: 1; }
-}
-/* =========================
-   水晶の中の星空
-========================= */
-
-.orb {
-  overflow: hidden; /* ←円の外に出ないようにする */
-}
-
-/* 星レイヤー */
-.stars {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  z-index: 2;
-
-  background-image:
-    radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 30% 40%, rgba(180,220,255,0.9), transparent),
-    radial-gradient(2px 2px at 70% 30%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 80% 60%, rgba(200,230,255,0.9), transparent),
-    radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 55% 15%, rgba(180,220,255,0.9), transparent),
-    radial-gradient(2px 2px at 20% 70%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 65% 50%, rgba(200,230,255,0.9), transparent),
-    radial-gradient(2px 2px at 85% 85%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 45% 55%, rgba(180,220,255,0.9), transparent),
-    radial-gradient(2px 2px at 15% 45%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 75% 10%, rgba(200,230,255,0.9), transparent);
-
-  animation: rotateStars 60s linear infinite;
-
-  /* ここ重要：光で浮かせる */
-  filter:
-    drop-shadow(0 0 4px white)
-    drop-shadow(0 0 10px rgba(120,170,255,0.8))
-    brightness(1.2);
-
-  mix-blend-mode: screen;
-}
-
-/* ゆっくり回転 */
-@keyframes rotateStars {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-</style>
+    button:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(0,0,0,.1);
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
-<div class="card">
-  <h1>今日の運勢</h1>
+  <div class="wrap">
 
-  <input id="name" placeholder="お名前">
-  <select id="year"></select>
-  <select id="month"></select>
-  <select id="day"></select>
+    <div class="catch">今日を少し良くする、運勢のヒント。</div>
 
-  <button onclick="fortune()">占う</button>
+    <h1>うんラボ</h1>
 
-  <div class="result" id="output"></div>
-<div id="crystal">
-  <div class="orb">
-    <div class="stars"></div>
+    <div class="lead">
+      今日の運勢を手がかりに、あなたの一日を心地よく始めてみませんか。<br>
+      小さな気づきが、今日という時間を整えてくれます。
+    </div>
+
+    <!-- ★ 行き先を fortune.html に変更 -->
+    <button onclick="location.href='fortune.html'">
+      今日の運勢を見る
+    </button>
+
   </div>
-  <div class="glow"></div>
-</div>
-</div>
-
-
-
-
-
-<script>
-let luckyItems = [];
-fetch("luckyitems.json")
-  .then(res => res.json())
-  .then(data => {
-    luckyItems = data;
-  });
-function getZodiac(month, day) {
-  if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "牡羊座";
-  if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "牡牛座";
-  if ((month == 5 && day >= 21) || (month == 6 && day <= 21)) return "双子座";
-  if ((month == 6 && day >= 22) || (month == 7 && day <= 22)) return "蟹座";
-  if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "獅子座";
-  if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "乙女座";
-  if ((month == 9 && day >= 23) || (month == 10 && day <= 23)) return "天秤座";
-  if ((month == 10 && day >= 24) || (month == 11 && day <= 22)) return "蠍座";
-  if ((month == 11 && day >= 23) || (month == 12 && day <= 21)) return "射手座";
-  if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return "山羊座";
-  if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "水瓶座";
-  return "魚座";
-}
-
-function getTodaysFortune(name, birthday) {
-  const today = new Date().toISOString().slice(0, 10);
-  const seed = name + birthday + today;
-
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash += seed.charCodeAt(i);
-  }
-
-
-
-
-
-
-
-const fortunes = [
-{
-  overall: "穏やかな流れがあなたを包んでいます。大きな波は立ちにくいものの、その分だけ心を整える余白が生まれる日です。結果を急がず、背伸びもせず、いつものあなたでいることが何よりの近道になります。自然体で選んだ行動が、気づけば一番良い場所へ導いてくれるでしょう。",
-  love: "やわらかな言葉のやり取りが、ふたりの距離をゆっくりと縮めていきます。特別な演出よりも、あなたらしい素直な気持ちが相手の胸に届くタイミングです。安心感を育てるつもりで向き合うと、温かな空気が長く続いていくでしょう。",
-  work: "急いで結果を出さなくても心配はいりません。今日は過程の丁寧さや、細部への気配りが高く評価される流れです。目立たない努力ほど、あとから確かな信頼として返ってきます。落ち着いた姿勢を大切に。",
-},
-{
-  overall: "ほんの少しの挑戦が、停滞していた空気を動かしてくれる日です。大きな決断でなくても構いません。いつもと違う選択、少しだけ勇気を出す姿勢が、新しい可能性の扉を開きます。風向きはあなたの味方になりつつあります。",
-  love: "何気ない会話の中に、心を近づけるヒントが隠れています。ふとした共通点や感覚の似ている部分に気づけたなら、それは関係が深まる合図。自然な笑顔を忘れずにいれば、流れは優しく続いていきます。",
-  work: "これまでとは少し違うやり方を試すことで、思いがけない発見につながりそうです。小さな改善や工夫が、全体の流れを軽くしてくれます。柔軟な発想を歓迎してもらえる日です。",
-},
-{
-  overall: "無理に進むよりも、整えることに意味がある日です。体と心を休ませることで、次のステージへ向かう準備が自然と進んでいきます。立ち止まることに不安を感じなくて大丈夫。静かな時間が未来の追い風になります。",
-  love: "穏やかな関係を築くための土台作りに最適なタイミングです。派手さよりも安心感。そばにいることの心地よさが、ゆっくりと絆を深めていきます。",
-  work: "足元を見直すことで、これからの安定が強まります。確認や振り返りを丁寧に行うほど、先々の不安が減っていくでしょう。焦らない姿勢が成功を引き寄せます。",
-},
-{
-  overall: "うれしい偶然が、もうすぐあなたの元へ届きます。そのサインはとてもさりげなく、静かな形で現れるでしょう。見逃さないためには、心に少しの余裕を持つこと。受け取る準備が整ったとき、流れははっきり動き始めます。",
-  love: "飾らないあなたの姿が、いつも以上に魅力として伝わる日です。自然体でいることが何よりのアピールになります。がんばらなくても、想いは十分に届くでしょう。",
-  work: "ひとりで進めるよりも、周囲との協力が鍵になります。助け合いの流れに身を置くことで、物事は想像以上にスムーズに展開します。",
-},
-{
-  overall: "心地よさを選ぶことが、そのまま運気の上昇につながります。義務や周囲の期待よりも、まずは自分の感覚を大切にしてみてください。満たされた気持ちは、自然と良い結果を呼び込みます。",
-  love: "さりげない優しさが、相手の心に長く残ります。大げさな言葉でなくても、あなたの気遣いは十分に伝わっています。安心できる空気が関係を育ててくれるでしょう。",
-  work: "落ち着いた判断と冷静な視点が高く評価される日です。慌てず、確実な選択を重ねることで信頼が深まっていきます。",
-},
-{
-  overall: "目立たなくても確かな追い風が吹いています。焦って走らなくても、歩幅を保って進めば自然と目的地へ近づけます。今日は安定した前進を意識すると良いでしょう。",
-  love: "相手の話を丁寧に受け止めることで、心の距離がぐっと縮まります。理解しようとする姿勢が温かな関係を育てます。",
-  work: "これまで準備してきたことが、ぴったりとはまる場面が訪れそうです。積み重ねてきた努力を信じてください。",
-},
-{
-  overall: "小さな違和感の中に大切なヒントが隠れている日です。見過ごさずに丁寧に向き合うことで、思いがけない良い方向へ進む道が見えてくるでしょう。焦って答えを出すよりも、自分の心の声を静かに聞く時間が運気を整えてくれます。",
-  love: "素直なリアクションがあなたの魅力を何倍にも引き出します。うまく見せようとしなくても大丈夫。感じたことをそのまま表現することで、自然と距離が縮まり、安心できる空気が生まれていきます。",
-  work: "確認や見直しをいつも以上に丁寧に行うことで、周囲からの信頼がぐっと高まります。地味に思える作業ほど大きな価値を持つ日。誠実な姿勢が後のチャンスにつながっていくでしょう。",
-},
-{
-  overall: "心に余裕が生まれ、その穏やかさが周囲にも広がっていく一日です。無理に頑張らなくても、あなたの落ち着いた存在そのものが良い流れをつくります。ゆったりとした気持ちで過ごすことが幸運の循環を強めます。",
-  love: "自然な笑顔が何よりの魅力になります。飾らない態度や優しい雰囲気が相手の緊張をほどき、心地よい距離感へと導いてくれるでしょう。安心できる時間を共有できそうです。",
-  work: "周囲に協力する姿勢が高く評価される日です。自分のことだけでなく、全体の流れを見ながら動くことで信頼が集まります。チームワークが運気をさらに後押ししてくれるでしょう。",
-},
-{
-  overall: "新しい流れの入口に立っているような感覚がありそうです。難しく考えすぎず、軽やかな気持ちで一歩を踏み出すことで自然と道がつながっていきます。好奇心を大切にすると未来が広がります。",
-  love: "何気ない一言やちょっとしたやり取りが、嬉しい展開を呼び込むきっかけになります。深く考えるより、まずは気持ちを交わしてみることが温かな関係への近道になるでしょう。",
-  work: "柔軟な対応があなたの評価を高めます。予定外の出来事も前向きに受け止めることで、思わぬチャンスへと変わっていきます。変化を楽しむ姿勢が鍵です。",
-},
-{
-  overall: "落ち着いて物事を見ることで最善の選択ができる日です。慌てず、今ある情報をゆっくり整理してみてください。あなたの冷静さが、自然と良い結果を引き寄せてくれます。",
-  love: "安心できる時間を共有できる流れがあります。派手な出来事よりも、静かで穏やかな瞬間の中に幸せを感じられるでしょう。心がゆっくり近づいていきます。",
-  work: "周囲との連携がとてもスムーズに進みます。一人で抱え込まず、頼ったり任せたりすることで物事が驚くほど整います。協調性が成功を呼びます。",
-},
-{
-  overall: "視点をほんの少し変えるだけで、今まで見えなかった光に気づける日です。行き詰まりを感じたら立ち止まり、違う角度から眺めてみましょう。気持ちが軽くなり、新しい可能性が開いていきます。",
-  love: "新しい発見が心を温めてくれます。相手の意外な一面や、自分自身の気持ちの変化に気づくかもしれません。その驚きが関係をより深めていくでしょう。",
-  work: "小さな改善が大きな前進へとつながる日です。完璧を目指すよりも、できることから整えていくことで確かな成果が見えてきます。",
-},
-{
-  overall: "がんばりすぎなくても、あなたの魅力や努力はしっかり伝わっています。肩の力を抜くことで、本来の良さがより自然に輝くでしょう。安心して自分らしく過ごしてください。",
-  love: "優しさが巡り巡ってあなたのもとへ戻ってくる日です。小さな思いやりが温かな空気を生み、心地よい関係を育ててくれます。無理のない交流が吉です。",
-  work: "特別なことをしなくても、いつも通りの丁寧さが成功の鍵になります。積み重ねてきた信頼がしっかり支えてくれるので、自信を持って進みましょう。",
-},
-{
-  overall: "流れに身を任せることで、不思議なほど物事が自然な場所へ収まっていきます。自分で強くコントロールしようとしなくても、今日は見えない力がちょうど良い方向へ導いてくれるでしょう。肩の力を抜き、目の前に現れる出来事を素直に受け取ることで、安心できる展開が待っています。",
-  love: "偶然の一致や、ふとした共通点に心が近づく予感があります。何気ないやり取りの中に、相手とのつながりを感じる瞬間がありそうです。その小さなサインを見逃さず、自然な流れに乗ってみてください。",
-  work: "無理のない計画や、いつも通りの進め方が良い結果につながります。背伸びをするよりも、安定した方法を選ぶことで周囲からの信頼も高まるでしょう。落ち着いた姿勢が成功を引き寄せます。",
-},
-{
-  overall: "あなたらしいペースで進むことが、いちばん良い流れを生み出す日です。周囲と比べたり急いだりしなくても大丈夫。心が心地よいと感じる速度を大切にすれば、自然と満足できる場所へたどり着けるでしょう。",
-  love: "ゆっくりとした進展の中に、確かな温もりが育っていきます。劇的ではなくても、安心できる関係が少しずつ形になっていく兆しがあります。優しい時間を楽しむ気持ちを忘れずに。",
-  work: "これまで積み重ねてきた努力が、目に見える形で実り始めます。派手さはなくても、確実な成果として評価されるでしょう。今までの自分を信じて進んでください。",
-},
-{
-  overall: "ほんの少しの工夫や視点の変化が、日常に新しい輝きを与えてくれます。いつもと同じ景色の中にも、見逃していた魅力が隠れているかもしれません。小さな発見を楽しむ気持ちが運気を優しく押し上げます。",
-  love: "気軽なやり取りや、軽やかな会話が良い流れを生みます。深く考えすぎず、自然なテンポで言葉を交わすことが距離を縮めるポイントになるでしょう。",
-  work: "整理整頓や環境を整えることが、思っている以上の効果をもたらします。身の回りがすっきりすると、判断力や集中力も高まり、物事がスムーズに進み始めます。",
-},
-{
-  overall: "静かな自信が心の奥に育ち、それが自然と良い結果を連れてきてくれます。強く主張しなくても、あなたの存在感はしっかりと周囲に伝わっているはず。安心してそのままの自分でいてください。",
-  love: "思いやりのある行動や言葉が、関係をより深いものへと導きます。相手の立場に立って考えることで、温かな絆がゆっくりと結ばれていくでしょう。",
-  work: "一人で抱え込まず、周囲の助けを受け取ることが前進の鍵になります。協力し合うことで、想像以上に大きな成果へつながる可能性があります。",
-},
-{
-  overall: "直感がいつも以上に冴えわたり、選ぶべき道が自然と見えてきます。頭で考えすぎるよりも、最初に感じたひらめきを信じてみると良いでしょう。その選択が、心地よい未来へとつながっています。",
-  love: "不思議とタイミングが合いやすい日です。連絡を取ろうと思った瞬間に相手から届くなど、心が通じていると感じられる出来事があるかもしれません。",
-  work: "新しい提案やアイデアが歓迎されやすい流れです。思いついたことは遠慮せずに表現してみましょう。前向きな反応が期待できます。",
-},
-{
-  overall: "ゆるやかで心地よい幸運が、長い時間あなたを包み込んでくれます。急激な変化はなくても、安定した満足感を得られるでしょう。安心して一日を過ごせそうです。",
-  love: "心が通じ合っていると感じられる出来事がありそうです。言葉にしなくても伝わる優しさに、ほっとする瞬間が訪れるでしょう。",
-  work: "誠実に向き合う姿勢がしっかりと評価されます。派手さよりも真面目さが光り、信頼という形で返ってくるはずです。",
-},
-{
-  overall: "安心感がテーマとなり、心が落ち着く出来事が増えていきます。無理に刺激を求めなくても、穏やかな時間の中に十分な幸せを見つけられるでしょう。",
-  love: "静かで優しい時間が、二人の関係を深めてくれます。特別な演出がなくても、そばにいるだけで満たされる感覚を味わえそうです。",
-  work: "着実に進めてきたことが、ゆっくりと実を結び始めます。焦らずに続ける姿勢が、最終的に大きな成果へとつながります。",
-},
-{
-  overall: "ほんの少し背伸びをすることで、これまで見えなかった新しい景色が広がります。勇気を出して一歩踏み出すことで、自分の可能性に気づく瞬間が訪れるでしょう。",
-  love: "嬉しい言葉や励ましを受け取れるかもしれません。その一言が、心を明るく照らしてくれるはずです。素直に喜びを受け止めてください。",
-  work: "挑戦する気持ちが良い方向へ働きます。完璧でなくても、前へ進もうとする姿勢が評価されるでしょう。",
-},
-{
-  overall: "自分自身を信じる気持ちが、運気の流れを整えていきます。不安よりも可能性に目を向けることで、自然と良い方向へ進めるでしょう。",
-  love: "心からの笑顔が周囲を温かくし、その空気が幸運を運んできます。無理のない自然な表情が魅力を高めてくれる日です。",
-  work: "集中力が高まり、取り組んでいることにしっかりとした成果が現れます。今は迷わず、目の前のことに力を注いでください。",
-},
-{
-  overall: "心にゆとりを持つことで、すべてが良い循環へと変わっていきます。余裕のある態度が、さらに穏やかな出来事を引き寄せるでしょう。",
-  love: "思いがけない展開が待っている可能性があります。予想外の出来事も、楽しむ気持ちで受け止めてみてください。",
-  work: "人とのつながりが重要な役割を果たします。協力や会話の中から、前進するためのヒントが見つかるでしょう。",
-},
-{
-  overall: "やさしい光に包まれているような、穏やかな安心感に満ちた日です。特別なことがなくても、静かな幸福を感じられるでしょう。",
-  love: "落ち着いた時間の中で、相手との信頼が深まっていきます。無理をしない自然体の関係が心を満たしてくれます。",
-  work: "丁寧で冷静な対応が高く評価されます。慌てずいつも通りを心がけることで、安定した成果を得られるでしょう。",
-},
-{
-  overall: "前向きな選択が、これからの未来を明るく照らしていきます。少し勇気を出すことで、新しい可能性がゆっくりと開いていくでしょう。",
-  love: "踏み出した一歩が、嬉しい変化を連れてきます。ためらわずに気持ちを表現することで、温かな展開が待っています。",
-  work: "チャレンジ精神が光り、周囲からの評価も高まります。自分の力を信じて行動することで、満足できる結果につながるでしょう。",
-},
-
-];
-
-const base = fortunes[hash % fortunes.length];
-const randomItem =
-  luckyItems[Math.floor(Math.random() * luckyItems.length)];
-
-
-// hash を利用して星を作る
-const stars = {
-  overall: (hash % 5) + 1,
-  love: ((hash >> 2) % 5) + 1,
-  work: ((hash >> 4) % 5) + 1
-};
-
-return { ...base, item: randomItem, stars };
-
-
-}
-
-function fortune() {
-
-  const name = document.getElementById("name").value;
-
-const year = document.getElementById("year").value;
-const month = document.getElementById("month").value;
-const day = document.getElementById("day").value;
-
-if (!name || !year || !month || !day) {
-  alert("名前と誕生日を入力してください");
-  return;
-}
-
-// 既存の仕組みに合わせて日付形式へ変換
-const birthday = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-
-
-  if (!name || !birthday) {
-    alert("名前と誕生日を入力してください");
-    return;
-  }
-
-  const crystal = document.getElementById("crystal");
-  crystal.classList.add("show");   // 水晶を表示
-  setTimeout(() => {
-    const date = new Date(birthday);
-    const zodiac = getZodiac(date.getMonth() + 1, date.getDate());
-    const fortune = getTodaysFortune(name, birthday);
-
-    document.getElementById("output").innerHTML =
-      `<p>${name}さんの星座は <b>${zodiac}</b> です。</p>
-<p>
-  <span class="titleLine">
-    <b>総合運：</b>
-    <span class="star">${makeStars(fortune.stars.overall)}</span>
-  </span><br>
-  ${fortune.overall}
-</p>
-
-<p>
-  <span class="titleLine">
-    <b>恋愛運：</b>
-    <span class="star">${makeStars(fortune.stars.love)}</span>
-  </span><br>
-  ${fortune.love}
-</p>
-
-<p>
-  <span class="titleLine">
-    <b>仕事運：</b>
-    <span class="star">${makeStars(fortune.stars.work)}</span>
-  </span><br>
-  ${fortune.work}
-</p>
-
-<p>
-  <span class="titleLine">
-    <b>ラッキーアイテム：</b>
-  ${fortune.item}
- </span>
-</p>`;
-
-
-document.getElementById("name").style.display = "none";
-document.getElementById("year").style.display = "none";
-document.getElementById("month").style.display = "none";
-document.getElementById("day").style.display = "none";
-document.querySelector("button").style.display = "none";
-
-
-  crystal.classList.remove("show");  // 水晶を消す
-
-  }, 2500); // 2.5秒儀式
-}
-
-function makeStars(num) {
-  return "★".repeat(num) + "☆".repeat(5 - num);
-}
-
-// ===== セレクトボックスに数字を入れる =====
-const yearSelect = document.getElementById("year");
-const monthSelect = document.getElementById("month");
-const daySelect = document.getElementById("day");
-
-// 年（例：1950〜今年）
-const thisYear = new Date().getFullYear();
-for (let y = thisYear; y >= 1950; y--) {
-  const option = document.createElement("option");
-  option.value = y;
-  option.textContent = y + "年";
-  yearSelect.appendChild(option);
-}
-
-// 月
-for (let m = 1; m <= 12; m++) {
-  const option = document.createElement("option");
-  option.value = m;
-  option.textContent = m + "月";
-  monthSelect.appendChild(option);
-}
-
-// 日
-for (let d = 1; d <= 31; d++) {
-  const option = document.createElement("option");
-  option.value = d;
-  option.textContent = d + "日";
-  daySelect.appendChild(option);
-}
-
-</script>
-</div>
 </body>
 </html>
