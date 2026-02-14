@@ -43,6 +43,15 @@ h1 {
   color: #dcd6ff;
   text-shadow: 0 0 10px rgba(150,150,255,0.5);
 }
+  .birth{
+  display:flex;
+  gap:8px;
+}
+
+.birth select{
+  flex:1;
+}
+
  .birth-label {
   margin: 10px 0 6px;
   font-size: 14px;
@@ -315,6 +324,9 @@ body {
 </style>
 </head>
 
+
+
+  
 <body>
 <div class="container">
 <div class="card">
@@ -322,9 +334,11 @@ body {
 
   <input id="name" placeholder="お名前">
   <p class="birth-label">生年月日</p>
+<div class="birth">
   <select id="year"></select>
   <select id="month"></select>
   <select id="day"></select>
+</div>
 
   <button onclick="fortune()">占う</button>
 
@@ -340,7 +354,7 @@ body {
 
 
 
-
+  
 <script>
 let luckyItems = [];
 fetch("luckyitems.json")
@@ -371,12 +385,6 @@ function getTodaysFortune(name, birthday) {
   for (let i = 0; i < seed.length; i++) {
     hash += seed.charCodeAt(i);
   }
-
-
-
-
-
-
 
 const fortunes = [
 {
