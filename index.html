@@ -6,7 +6,7 @@
 
   <style>
     :root{
-      --accent:#81D8D0; /* ティファニーブルー */
+      --accent:#81D8D0;
       --gold:#d4b15a;
     }
 
@@ -23,7 +23,7 @@
     }
 
     .wrap{
-      max-width:700px;
+      max-width:720px;
       padding:40px;
     }
 
@@ -55,11 +55,31 @@
       border-radius:999px;
       cursor:pointer;
       transition:.3s;
+      margin-bottom:30px;
     }
 
     button:hover{
       transform:translateY(-2px);
       box-shadow:0 10px 20px rgba(0,0,0,.1);
+    }
+
+    /* ▼ ゆっくり出る文章 */
+    #story{
+      margin-top:20px;
+      line-height:1.9;
+      font-size:14px;
+      color:#666;
+      min-height:200px;
+    }
+
+    .line{
+      opacity:0;
+      animation: fadeIn 1.5s forwards;
+      margin-bottom:14px;
+    }
+
+    @keyframes fadeIn{
+      to{ opacity:1; }
     }
   </style>
 </head>
@@ -76,11 +96,44 @@
       小さな気づきが、今日という時間を整えてくれます。
     </div>
 
-    <!-- ★ 行き先を fortune.html に変更 -->
     <button onclick="location.href='fortune.html'">
       今日の運勢を見る
     </button>
 
+    <!-- ▼ ここに物語が出てくる -->
+    <div id="story"></div>
+
   </div>
+
+  <script>
+    const messages = [
+      "占いの結果は、未来を決めるものではありません。",
+      "けれど今のあなたに流れている空気や、選択のヒントを映し出してくれる鏡のような存在です。",
+      "",
+      "同じ言葉でも受け取り方は人それぞれ。",
+      "背中を押される日もあれば、立ち止まって考えるきっかけになることもあります。大切なのは、そこから何を感じ、どうしたいと思うかです。",
+      "",
+      "ここでは良い・悪いを決めつけたり、不安をあおったりはしません。",
+      "ただ、今日という時間を心地よく過ごすための視点をそっと置いていきます。",
+      "",
+      "迷ったときや踏み出したいとき、自分の気持ちを確かめたいとき。",
+      "運勢をひとつの材料にして、自分自身と向き合ってみてください。",
+      "",
+      "選ぶのはいつでもあなた。",
+      "その決断が少しでも軽くなるように、この場所が静かな後押しになれたならうれしく思います。"
+    ];
+
+    const story = document.getElementById("story");
+
+    messages.forEach((text, index) => {
+      setTimeout(() => {
+        const p = document.createElement("div");
+        p.className = "line";
+        p.textContent = text;
+        story.appendChild(p);
+      }, index * 1200); // ←表示スピード（大きくするとゆっくり）
+    });
+  </script>
+
 </body>
 </html>
