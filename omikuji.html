@@ -29,6 +29,7 @@ body{
   transition: transform 4s cubic-bezier(.17,.67,.13,.99);
 }
 
+
 /* 区切り（7分割） */
 .slice{
   position:absolute;
@@ -62,6 +63,14 @@ button{
   border:none;
   cursor:pointer;
 }
+.label{
+  transform-origin: 0 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 4px rgba(0,0,0,.4);
+  white-space: nowrap;
+}
 </style>
 </head>
 
@@ -79,20 +88,31 @@ button{
 
 <h2 id="result"></h2>
 
+
 <script>
-const results = ["大吉","中吉","小吉","吉","末吉","凶","大凶"];
+const results = ["大吉","中吉","小吉","吉","末吉","平","凶","大凶"];
 
 const wheel = document.getElementById("wheel");
 
 // スライス作成
-const colors = ["#ff6b6b","#feca57","#48dbfb","#1dd1a1","#5f27cd","#ee5253","#ff9ff3"];
+const colors = ["#ff6b6b","#feca57","#48dbfb","#1dd1a1","#ee3902","#5f27cd","#ee5253","#ff9ff3"];
 
 results.forEach((r,i)=>{
   const s = document.createElement("div");
   s.className = "slice";
   s.style.background = colors[i];
   s.style.transform = `rotate(${360/results.length*i}deg) skewY(${90-360/results.length}deg)`;
-  s.innerHTML = `<div style="transform:skewY(-${90-360/results.length}deg) rotate(${360/results.length/2}deg);">${r}</div>`;
+  s.innerHTML = `
+  <div class="label"
+       style="
+transform:
+skewY(-${90-360/results.length}deg)
+rotate(${360/results.length/2}deg)
+translate(18px, -5px);
+">
+    ${r}
+  </div>
+`;
   wheel.appendChild(s);
 });
 
@@ -115,7 +135,24 @@ function spinLoop(){
 function stopSpin(){
   spinning = false;
 
-  const finalIndex = Math.floor(Math.random()*results.length);
+  // ===== 確率設定 =====
+const weights = [6, 15, 23, 23, 23,7, 2, 1]; 
+// results と同じ順番
+
+function weightedRandom() {
+  const total = weights.reduce((a,b)=>a+b,0);
+  let r = Math.random() * total;
+
+  for (let i = 0; i < weights.length; i++) {
+    if (r < weights[i]) return i;
+    r -= weights[i];
+  }
+  return 0;
+}
+
+const finalIndex = weightedRandom();
+
+
   const degPerSlice = 360/results.length;
 
   const stopAngle = (360*5) + (360 - finalIndex*degPerSlice - degPerSlice/2);
