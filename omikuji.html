@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運試しルーレット</title>
+
+<style>
+body{
+  margin:0;
+  font-family: sans-serif;
+  background:#0b1026;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  flex-direction:column;
+}
+
+/* ルーレット */
+.wheel{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  border:6px solid white;
+  position:relative;
+  overflow:hidden;
+  transition: transform 4s cubic-bezier(.17,.67,.13,.99);
+}
+
+/* 区切り（7分割） */
+.slice{
+  position:absolute;
+  width:50%;
+  height:50%;
+  top:50%;
+  left:50%;
+  transform-origin:0% 0%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:14px;
+}
+
+/* 針 */
+.pointer{
+  width:0;
+  height:0;
+  border-left:12px solid transparent;
+  border-right:12px solid transparent;
+  border-top:20px solid #ff4d6d;
+  margin-bottom:10px;
+}
+
+/* ボタン */
+button{
+  margin:10px;
+  padding:10px 20px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>運試し</h1>
+
+<div class="pointer"></div>
+<div class="wheel" id="wheel"></div>
+
+<div>
+  <button onclick="startSpin()">START</button>
+  <button onclick="stopSpin()">STOP</button>
+</div>
+
+<h2 id="result"></h2>
+
+<script>
+const results = ["大吉","中吉","小吉","吉","末吉","凶","大凶"];
+
+const wheel = document.getElementById("wheel");
+
+// スライス作成
+const colors = ["#ff6b6b","#feca57","#48dbfb","#1dd1a1","#5f27cd","#ee5253","#ff9ff3"];
+
+results.forEach((r,i)=>{
+  const s = document.createElement("div");
+  s.className = "slice";
+  s.style.background = colors[i];
+  s.style.transform = `rotate(${360/results.length*i}deg) skewY(${90-360/results.length}deg)`;
+  s.innerHTML = `<div style="transform:skewY(-${90-360/results.length}deg) rotate(${360/results.length/2}deg);">${r}</div>`;
+  wheel.appendChild(s);
+});
+
+let spinning = false;
+let currentRotation = 0;
+
+function startSpin(){
+  spinning = true;
+  document.getElementById("result").textContent = "";
+  spinLoop();
+}
+
+function spinLoop(){
+  if(!spinning) return;
+  currentRotation += 20;
+  wheel.style.transform = `rotate(${currentRotation}deg)`;
+  requestAnimationFrame(spinLoop);
+}
+
+function stopSpin(){
+  spinning = false;
+
+  const finalIndex = Math.floor(Math.random()*results.length);
+  const degPerSlice = 360/results.length;
+
+  const stopAngle = (360*5) + (360 - finalIndex*degPerSlice - degPerSlice/2);
+
+  wheel.style.transform = `rotate(${stopAngle}deg)`;
+
+  setTimeout(()=>{
+    document.getElementById("result").textContent = results[finalIndex];
+  },4000);
+}
+</script>
+
+</body>
+</html>
