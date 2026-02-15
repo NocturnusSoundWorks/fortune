@@ -78,6 +78,36 @@ button{
   text-shadow: 0 0 4px rgba(0,0,0,.4);
   white-space: nowrap;
 }
+.main{
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+
+/* 右側の表 */
+.table-area{
+  background: rgba(0,0,0,0.5);
+  padding:15px;
+  border-radius:10px;
+  max-width:420px;
+}
+
+.table-area table{
+  border-collapse: collapse;
+  width:100%;
+  font-size:14px;
+}
+
+.table-area th,
+.table-area td{
+  border-bottom:1px solid rgba(255,255,255,0.3);
+  padding:6px;
+  text-align:left;
+}
+
+.table-area th{
+  width:70px;
+}  
 </style>
 </head>
 
@@ -85,12 +115,57 @@ button{
 
 <h1>運試し</h1>
 
-<div class="pointer"></div>
-<div class="wheel" id="wheel"></div>
+<div class="main">
+  <div class="roulette-area">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel"></div>
 
-<div>
-  <button onclick="startSpin()">START</button>
-  <button onclick="stopSpin()">STOP</button>
+    <div>
+      <button onclick="startSpin()">START</button>
+      <button onclick="stopSpin()">STOP</button>
+    </div>
+
+    <h2 id="result"></h2>
+  </div>
+<div class="table-area">
+  <table>
+    <tr>
+      <th>大吉</th>
+      <td>最高にハッピーな流れ。自信を持って進むほど良い結果に近づきます。</td>
+    </tr>
+    <tr>
+      <th>中吉</th>
+      <td>とても良い運気。謙虚さを忘れなければさらに上向いていきます。</td>
+    </tr>
+    <tr>
+      <th>小吉</th>
+      <td>小さな幸せが積み重なる日。コツコツが嬉しい実りに変わります。</td>
+    </tr>
+    <tr>
+      <th>吉</th>
+      <td>安定した順調さがあります。欲張らず今あるものを大切に。</td>
+    </tr>
+    <tr>
+      <th>末吉</th>
+      <td>ここから運気が伸びていく途中段階。焦らず整えるのが鍵。</td>
+    </tr>
+    <tr>
+      <th>平</th>
+      <td>大きな波は立ちません。穏やかな気持ちで心地よく過ごせます。</td>
+    </tr>
+    <tr>
+      <th>凶</th>
+      <td>少し注意が必要な流れ。慎重な選択があなたを守ります。</td>
+    </tr>
+    <tr>
+      <th>大凶</th>
+      <td>停滞気味の運気。無理をせず、回復のタイミングを待ちましょう。</td>
+    </tr>
+  </table>
+</div>
+
+ 
+  
 </div>
 
 <h2 id="result"></h2>
