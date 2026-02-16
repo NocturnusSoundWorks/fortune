@@ -321,6 +321,29 @@ body {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+.back-button{
+  text-align:center;
+  margin:20px 0 40px;
+}
+
+.back-button a{
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:bold;
+  color:white;
+
+  background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+  box-shadow: 0 0 15px rgba(168,85,247,0.5);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.back-button a:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(236,72,153,0.8);
+}
 </style>
 </head>
 
@@ -737,6 +760,9 @@ for (let d = 1; d <= 31; d++) {
 }
 
 </script>
+</div>
+  <div class="back-button">
+  <a href="index.html">戻る</a>
 </div>
 </body>
 </html>
