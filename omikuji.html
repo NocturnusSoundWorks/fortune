@@ -3,260 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>運試しルーレット</title>
+<title>おみくじ結果</title>
 
 <style>
 body{
   margin:0;
-  font-family: sans-serif;
-
-  background-image: url("hakei.jpg"); /* ← 画像 */
-  background-size: cover;            /* ← 画面いっぱい */
-  background-position: center;       /* ← 中央 */
-  background-repeat: no-repeat;      /* ← 繰り返さない */
-
-  color:black;
+  background:black;
+  color:white;
+  font-family:"Noto Sans JP", sans-serif;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
   flex-direction:column;
-}
-
-
-/* ルーレット */
-.wheel{
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  border:6px solid white;
-  position:relative;
   overflow:hidden;
-  transition: transform 4s cubic-bezier(.17,.67,.13,.99);
 }
 
-
-/* 区切り（7分割） */
-.slice{
-  position:absolute;
-  width:50%;
-  height:50%;
-  top:50%;
-  left:50%;
-  transform-origin:0% 0%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:14px;
+/* 結果表示 */
+#result{
+  font-size:60px;
+  letter-spacing:8px;
+  opacity:0;
+  transform:translateY(20px);
 }
 
-/* 針 */
-.pointer{
-  width:0;
-  height:0;
-  border-left:12px solid transparent;
-  border-right:12px solid transparent;
-  border-top:20px solid #ff4d6d;
-  margin-bottom:10px;
+/* 5秒かけて浮かび上がる */
+.fade-in{
+  animation: reveal 5s ease forwards;
 }
 
-/* ボタン */
-button{
-  margin:10px;
-  padding:10px 20px;
-  font-size:16px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-}
-.label{
-  transform-origin: 0 0;
-  font-size: 14px;
-  font-weight: bold;
-  color: black;
-  text-shadow: 0 0 4px rgba(0,0,0,.4);
-  white-space: nowrap;
-}
-.main{
-  display:flex;
-  gap:40px;
-  align-items:center;
-}
-.roulette-area{
-  display:flex;
-  flex-direction:column;
-  align-items:center;   /* ← 横方向の中央 */
-  text-align:center;    /* ← 文字も中央 */
-}
-  
-
-/* 右側の表 */
-.table-area{
-    background: rgba(255,255,255,0.9);
-  padding:15px;
-  border-radius:10px;
-  max-width:420px;
-}
-
-.table-area table{
-  border-collapse: collapse;
-  width:100%;
-  font-size:14px;
-}
-
-.table-area th,
-.table-area td{
-  border-bottom:1px solid rgba(0,0,0,0.2);
-  padding:6px;
-  text-align:left;
-}
-
-.table-area th{
-  width:70px;
-}  
-@media (max-width: 768px){
-  .main{
-    flex-direction: column;
-    gap:20px;
-    align-items:center;
-  }
-
-  .table-area{
-    width:90%;
+@keyframes reveal{
+  to{
+    opacity:1;
+    transform:translateY(0);
   }
 }
-.back-button{
-  margin-top:20px;
-  text-align:center;
+
+/* 戻るボタン */
+#back{
+  margin-top:40px;
+  opacity:0;
+  transition: opacity 1.5s ease;
 }
-.back-button a{
-  display:inline-block;
-  padding:10px 20px;
-  background:#333;
+
+#back a{
   color:white;
-  border-radius:10px;
   text-decoration:none;
+  border:1px solid white;
+  padding:12px 28px;
+  border-radius:30px;
+  font-size:14px;
+  letter-spacing:2px;
+  transition:.3s;
 }
 
+#back a:hover{
+  background:white;
+  color:black;
+}
 </style>
 </head>
 
 <body>
 
-<h1>運試し</h1>
-
-<div class="main">
-  <div class="roulette-area">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel"></div>
-
-    <div>
-      <button onclick="startSpin()">START</button>
-      <button onclick="stopSpin()">STOP</button>
-    </div>
-
-    <h2 id="result"></h2>
-  </div>
-<div class="table-area">
-  <table>
-    <tr>
-      <th>大吉</th>
-      <td>最高にハッピーな流れ。自信を持って進むほど良い結果に近づきます。</td>
-    </tr>
-    <tr>
-      <th>中吉</th>
-      <td>とても良い運気。謙虚さを忘れなければさらに上向いていきます。</td>
-    </tr>
-    <tr>
-      <th>小吉</th>
-      <td>小さな幸せが積み重なる日。コツコツが嬉しい実りに変わります。</td>
-    </tr>
-    <tr>
-      <th>吉</th>
-      <td>安定した順調さがあります。欲張らず今あるものを大切に。</td>
-    </tr>
-    <tr>
-      <th>末吉</th>
-      <td>ここから運気が伸びていく途中段階。焦らず整えるのが鍵。</td>
-    </tr>
-    <tr>
-      <th>平</th>
-      <td>大きな波は立ちません。穏やかな気持ちで心地よく過ごせます。</td>
-    </tr>
-    <tr>
-      <th>凶</th>
-      <td>少し注意が必要な流れ。慎重な選択があなたを守ります。</td>
-    </tr>
-    <tr>
-      <th>大凶</th>
-      <td>停滞気味の運気。無理をせず、回復のタイミングを待ちましょう。</td>
-    </tr>
-  </table>
-</div>
-
- 
-  
+<div id="result"></div>
+<div id="back">
+  <a href="index.html">トップへ戻る</a>
 </div>
 
 <script>
 const results = ["大吉","中吉","小吉","吉","末吉","平","凶","大凶"];
 
-const wheel = document.getElementById("wheel");
-
-// スライス作成
-const colors = [
-  "#81D8D0", // ティファニーブルー
-  "#aee7e3",
-  "#d4f3f1",
-  "#ffffff",
-  "#b8e0dd",
-  "#e6f7f6",
-  "#cfeeed",
-  "#f3fbfb"
-];
-
-
-results.forEach((r,i)=>{
-  const s = document.createElement("div");
-  s.className = "slice";
-  s.style.background = colors[i];
-  s.style.transform = `rotate(${360/results.length*i}deg) skewY(${90-360/results.length}deg)`;
-  s.innerHTML = `
-  <div class="label"
-       style="
-transform:
-skewY(-${90-360/results.length}deg)
-rotate(${360/results.length/2}deg)
-translate(65px, 0);
-">
-    ${r}
-  </div>
-`;
-  wheel.appendChild(s);
-});
-
-let spinning = false;
-let currentRotation = 0;
-
-function startSpin(){
-  spinning = true;
-  document.getElementById("result").textContent = "";
-  spinLoop();
-}
-
-function spinLoop(){
-  if(!spinning) return;
-  currentRotation += 20;
-  wheel.style.transform = `rotate(${currentRotation}deg)`;
-  requestAnimationFrame(spinLoop);
-}
-
-function stopSpin(){
-  spinning = false;
-
-  // ===== 確率設定 =====
-const weights = [6, 15, 23, 23, 23,7, 2, 1]; 
-// results と同じ順番
+// 確率（以前と同じ）
+const weights = [6, 15, 23, 23, 23, 7, 2, 1];
 
 function weightedRandom() {
   const total = weights.reduce((a,b)=>a+b,0);
@@ -269,23 +88,26 @@ function weightedRandom() {
   return 0;
 }
 
-const finalIndex = weightedRandom();
+// ページ読み込みと同時に抽選開始
+window.onload = function(){
 
+  const index = weightedRandom();
+  const resultEl = document.getElementById("result");
 
-  const degPerSlice = 360/results.length;
+  resultEl.textContent = results[index];
 
-  const stopAngle = (360*5) + (360 - finalIndex*degPerSlice - degPerSlice/2);
-
-  wheel.style.transform = `rotate(${stopAngle}deg)`;
-
+  // フェードイン開始
   setTimeout(()=>{
-    document.getElementById("result").textContent = results[finalIndex];
-  },4000);
-}
+    resultEl.classList.add("fade-in");
+  }, 500);
+
+  // 5秒後に戻るボタン表示
+  setTimeout(()=>{
+    document.getElementById("back").style.opacity = "1";
+  }, 5500);
+
+};
 </script>
-<div class="back-button">
-  <a href="index.html">トップへ戻る</a>
-</div>
 
 </body>
 </html>
