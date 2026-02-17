@@ -26,6 +26,13 @@ body{
   opacity:0;
   transform:translateY(20px);
 }
+#caption{
+  margin-top:30px;
+  font-size:16px;
+  max-width:500px;
+  line-height:1.8;
+  opacity:0;
+}
 
 /* 5秒かけて浮かび上がる */
 .fade-in{
@@ -67,12 +74,24 @@ body{
 <body>
 
 <div id="result"></div>
+<div id="caption"></div>
 <div id="back">
   <a href="index.html">トップへ戻る</a>
 </div>
 
 <script>
 const results = ["大吉","中吉","小吉","吉","末吉","平","凶","大凶"];
+const captions = {
+  "大吉":"最高にハッピーな流れ。自信を持って進むほど良い結果に近づきます。",
+  "中吉":"とても良い運気。謙虚さを忘れなければさらに上向いていきます。",
+  "小吉":"小さな幸せが積み重なる日。コツコツが嬉しい実りに変わります。",
+  "吉":"安定した順調さがあります。欲張らず今あるものを大切に。",
+  "末吉":"ここから運気が伸びていく途中段階。焦らず整えるのが鍵。",
+  "平":"大きな波は立ちません。穏やかな気持ちで心地よく過ごせます。",
+  "凶":"少し注意が必要な流れ。慎重な選択があなたを守ります。",
+  "大凶":"停滞気味の運気。無理をせず、回復のタイミングを待ちましょう。"
+};
+
 
 // 確率（以前と同じ）
 const weights = [6, 15, 23, 23, 23, 7, 2, 1];
@@ -92,21 +111,38 @@ function weightedRandom() {
 window.onload = function(){
 
   const index = weightedRandom();
+  const resultText = results[index];
+
   const resultEl = document.getElementById("result");
+  const captionEl = document.getElementById("caption");
 
-  resultEl.textContent = results[index];
+  resultEl.textContent = resultText;
 
-  // フェードイン開始
+  // 結果フェードイン
   setTimeout(()=>{
     resultEl.classList.add("fade-in");
   }, 500);
 
-  // 5秒後に戻るボタン表示
+  // 3秒後にキャプション表示開始
   setTimeout(()=>{
-    document.getElementById("back").style.opacity = "1";
-  }, 5500);
+    captionEl.style.opacity = 1;
+    typeWriter(captions[resultText], captionEl, 0);
+  }, 3000);
 
 };
+function typeWriter(text, element, index){
+  if(index < text.length){
+    element.textContent += text.charAt(index);
+    setTimeout(()=>{
+      typeWriter(text, element, index + 1);
+    }, 50); // ←タイピング速度（小さいほど速い）
+  } else {
+    // 打ち終わったら戻るボタン表示
+    document.getElementById("back").style.opacity = "1";
+  }
+}
+
+
 </script>
 
 </body>
