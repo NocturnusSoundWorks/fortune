@@ -86,6 +86,19 @@ body{
   50%{opacity:0;}
   100%{opacity:1;}
 }
+.title{
+  width:90%;
+  max-width:500px;
+  image-rendering: pixelated;
+  margin-bottom:60px;
+  animation: floatTitle 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatTitle{
+  from{ transform: translateY(-5px); }
+  to{ transform: translateY(5px); }
+}
+
 </style>
 </head>
 
