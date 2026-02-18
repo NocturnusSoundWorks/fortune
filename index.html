@@ -1,174 +1,151 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>うんラボ</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うんラボ</title>
 
-  <style>
-    :root{
-      --accent:#81D8D0;
-      --gold:#d4b15a;
-    }
+<!-- ドットフォント -->
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 
-    body{
+<style>
+body{
   margin:0;
-  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
-
-  background-image: url("seiza.jpg");
-  background-size: cover;        /* 画面いっぱいに広げる */
-  background-position: center;   /* 中央配置 */
-  background-repeat: no-repeat;  /* 繰り返さない */
-
-  color:#444;
+  height:100vh;
+  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
-  text-align:center;
-}
-
-.wrap{
-  max-width:720px;
-  padding:40px;
-
-  display:flex;
   flex-direction:column;
-  align-items:center;
-  
-  animation: appear .8s ease forwards;
+
+  font-family: 'DotGothic16', sans-serif;
+  color:white;
+
+  /* 濃紺 */
+  background: #0000cd;
+}
+
+/* 星レイヤー */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: blinkStar 2s infinite alternate;
+}
+
+@keyframes blinkStar{
+  0%{ opacity:0.2; }
+  50%{ opacity:1; }
+  100%{ opacity:0.2; }
+}
+
+/* タイトル */
+.title{
+  width:90%;
+  max-width:500px;
+  image-rendering: pixelated;
+  margin-bottom:60px;
+}
+
+/* メニュー */
+.menu{
+  text-align:center;
+  font-size:28px;
+  letter-spacing:4px;
+}
+
+.menu-item{
+  margin:20px 0;
+  cursor:pointer;
+  position:relative;
+}
+
+/* 選択中の点滅 */
+.menu-item::before{
+  content: "▶";
+  position:absolute;
+  left:-40px;
   opacity:0;
-  transform: translateY(10px);
 }
-    .catch{
-      font-size:14px;
-      color:var(--gold);
-      margin-bottom:10px;
-      letter-spacing:.05em;
-    }
 
-    h1{
-      font-size:42px;
-      margin:0 0 10px;
-      color:var(--accent);
-    }
-
-    .lead{
-      font-size:16px;
-      line-height:1.8;
-      margin:20px 0 30px;
-    }
-
-    button{
-      background:var(--accent);
-      color:white;
-      border:none;
-      padding:14px 30px;
-      font-size:16px;
-      border-radius:999px;
-      cursor:pointer;
-      transition:.3s;
-    }
-
-    button:hover{
-      transform:translateY(-2px);
-      box-shadow:0 10px 20px rgba(0,0,0,.1);
-    }
-
-    /* ▼ ゆっくり出る文章 */
-    #story{
-      margin-top:20px;
-      line-height:1.9;
-      font-size:14px;
-      color:#666;
-      min-height:200px;
-    }
-
-    .line{
-      opacity:0;
-      animation: fadeIn 1.5s forwards;
-      margin-bottom:14px;
-    }
-
-    @keyframes fadeIn{
-      to{ opacity:1; }
-    }
-    @keyframes appear{
-  to{
-    opacity:1;
-    transform: translateY(0);
-  }
+.menu-item.active::before{
+  opacity:1;
+  animation: blink 1s infinite;
 }
-    .title-image{
-  width: 100%;
-  max-width: 560px;
-  margin-bottom: 12px;
+
+@keyframes blink{
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
 }
-.button-area{
-  display:flex;
-  gap:15px;          /* ボタン同士の間 */
-  justify-content:center;
-  flex-wrap:wrap;    /* スマホで崩れないように */
-  margin-bottom:30px;
+// 星を大量生成
+const starContainer = document.querySelector(".stars");
+
+for(let i=0; i<120; i++){  // ← 数字を増やすと星が増える
+  const star = document.createElement("div");
+  star.classList.add("star");
+
+  star.style.top = Math.random() * 100 + "%";
+  star.style.left = Math.random() * 100 + "%";
+
+  star.style.animationDelay = Math.random() * 2 + "s";
+
+  starContainer.appendChild(star);
 }
-    
-  </style>
+</style>
 </head>
 
-
-  
 <body>
-  <div class="wrap">
 
-    <img src="title.png" class="title-image" alt="うんラボ タイトル">
+<div class="stars"></div>
 
-<div class="button-area">
-  <button onclick="location.href='fortune.html'">
-    今日の運勢を見る
-  </button>
-  <button onclick="location.href='shrine.html'">
-    運試し
-  </button>
-    <button onclick="location.href='number.html'">
-    ラッキーナンバー
-  </button>
+<img src="maintitle.png" class="title" alt="メインタイトル">
+
+<div class="menu">
+  <div class="menu-item active" data-link="start.html">START</div>
+  <div class="menu-item" data-link="login.html">LOGIN</div>
 </div>
 
+<script>
+const items = document.querySelectorAll(".menu-item");
+let current = 0;
 
-    <!-- ▼ ここに物語が出てくる -->
-    <div id="story"></div>
+// 選択移動
+document.addEventListener("keydown", (e)=>{
 
-  </div>
+  if(e.key === "ArrowUp"){
+    items[current].classList.remove("active");
+    current = (current - 1 + items.length) % items.length;
+    items[current].classList.add("active");
+  }
 
-  <script>
-    const messages = [
-      "占いの結果は、未来を決めるものではありません。",
-      "けれど今のあなたに流れている空気や、選択のヒントを映し出してくれる鏡のような存在です。",
-      "",
-      "同じ言葉でも受け取り方は人それぞれ。",
-      "背中を押される日もあれば、立ち止まって考えるきっかけになることもあります。",
-      "大切なのは、そこから何を感じ、どうしたいと思うかです。",
-      "",
-      "ここでは良い・悪いを決めつけたり、不安をあおったりはしません。",
-      "ただ、今日という時間を心地よく過ごすための視点をそっと置いていきます。",
-      "",
-      "迷ったときや踏み出したいとき、自分の気持ちを確かめたいとき。",
-      "運勢をひとつの材料にして、自分自身と向き合ってみてください。",
-      "",
-      "選ぶのはいつでもあなた。",
-      "その決断が少しでも軽くなるように、この場所が静かな後押しになれたならうれしく思います。"
-    ];
+  if(e.key === "ArrowDown"){
+    items[current].classList.remove("active");
+    current = (current + 1) % items.length;
+    items[current].classList.add("active");
+  }
 
-    const story = document.getElementById("story");
+  if(e.key === "Enter"){
+    location.href = items[current].dataset.link;
+  }
 
-    messages.forEach((text, index) => {
-      setTimeout(() => {
-        const p = document.createElement("div");
-        p.className = "line";
-        p.textContent = text;
-        story.appendChild(p);
-      }, index * 1200); // ←表示スピード（大きくするとゆっくり）
-    });
-  </script>
+});
+
+// クリック対応
+items.forEach((item, index)=>{
+  item.addEventListener("click", ()=>{
+    location.href = item.dataset.link;
+  });
+});
+</script>
 
 </body>
 </html>
