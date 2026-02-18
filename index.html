@@ -22,7 +22,7 @@ body{
   color:white;
 
   /* 濃紺 */
-  background: #0000cd;
+  background: #191970;
 }
 
 /* 星レイヤー */
@@ -86,20 +86,6 @@ body{
   50%{opacity:0;}
   100%{opacity:1;}
 }
-// 星を大量生成
-const starContainer = document.querySelector(".stars");
-
-for(let i=0; i<120; i++){  // ← 数字を増やすと星が増える
-  const star = document.createElement("div");
-  star.classList.add("star");
-
-  star.style.top = Math.random() * 100 + "%";
-  star.style.left = Math.random() * 100 + "%";
-
-  star.style.animationDelay = Math.random() * 2 + "s";
-
-  starContainer.appendChild(star);
-}
 </style>
 </head>
 
@@ -145,6 +131,20 @@ items.forEach((item, index)=>{
     location.href = item.dataset.link;
   });
 });
+// 星を大量生成
+const starContainer = document.querySelector(".stars");
+
+for(let i=0; i<120; i++){  // ← 数字を増やすと星が増える
+  const star = document.createElement("div");
+  star.classList.add("star");
+
+  star.style.top = Math.random() * 100 + "%";
+  star.style.left = Math.random() * 100 + "%";
+
+  star.style.animationDelay = Math.random() * 2 + "s";
+
+  starContainer.appendChild(star);
+}
 </script>
 
 </body>
