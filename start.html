@@ -53,8 +53,10 @@ body{
   box-sizing:border-box;
   overflow-y:auto;
   background:rgba(0,0,0,0.4);
-  line-height:1.8;
-  font-size:16px;
+  line-height:2.2;
+  text-align: center;
+  font-size:20px;
+  white-space: pre-line;
 }
 
 /* ボタン共通 */
@@ -100,4 +102,77 @@ body{
 <div class="menu" id="buttons">
   <div class="menu-item" id="skipBtn">SKIP</div>
   <div class="menu-item" id="backBtn" style="display:none;" data-link="main.html">戻る</div>
-  <div class="menu-item"
+  <div class="menu-item" id="regBtn" style="display:none;" data-link="touroku.html">とうろく</div>
+</div>
+
+<script>
+
+/* 星空生成 */
+const starContainer = document.querySelector(".stars");
+for(let i=0;i<120;i++){
+  const star=document.createElement("div");
+  star.classList.add("star");
+  star.style.top=Math.random()*100+"%";
+  star.style.left=Math.random()*100+"%";
+  star.style.animationDelay=Math.random()*2+"s";
+  starContainer.appendChild(star);
+}
+
+/* タイピング文章 */
+const message = `占いの結果は、未来を決めるものではありません。
+けれど今のあなたに流れている空気や、
+選択のヒントを映し出してくれる鏡のような存在です。
+同じ言葉でも受け取り方は人それぞれ。
+背中を押される日もあれば、
+立ち止まって考えるきっかけになることもあります。
+大切なのは、そこから何を感じ、どうしたいと思うかです。
+ここでは良い・悪いを決めつけたり、不安をあおったりはしません。
+ただ、今日という時間を心地よく過ごすための視点を
+そっと置いていきます。
+迷ったときや踏み出したいとき、自分の気持ちを確かめたいとき。
+運勢をひとつの材料にして、自分自身と向き合ってみてください。
+選ぶのはいつでもあなた。
+その決断が少しでも軽くなるように、
+この場所が静かな後押しになれたならうれしく思います。`;
+
+const textEl = document.getElementById("text");
+const skipBtn = document.getElementById("skipBtn");
+const backBtn = document.getElementById("backBtn");
+const regBtn = document.getElementById("regBtn");
+
+let index=0;
+let typing=true;
+
+function typeWriter(){
+  if(index < message.length && typing){
+    textEl.textContent += message.charAt(index);
+    index++;
+    setTimeout(typeWriter,80);
+  }else{
+    finishTyping();
+  }
+}
+
+function finishTyping(){
+  typing=false;
+  textEl.textContent = message;
+  skipBtn.style.display="none";
+  backBtn.style.display="block";
+  regBtn.style.display="block";
+}
+
+skipBtn.addEventListener("click", finishTyping);
+
+typeWriter();
+
+/* ボタン移動 */
+document.querySelectorAll("[data-link]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    location.href = btn.dataset.link;
+  });
+});
+
+</script>
+
+</body>
+</html>
