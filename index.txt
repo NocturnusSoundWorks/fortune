@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うんラボ</title>
+
+<!-- ドットフォント -->
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+
+  font-family: 'DotGothic16', sans-serif;
+  color:white;
+
+  /* 濃紺 */
+  background: #191970;
+}
+
+/* 星レイヤー */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: blinkStar 2s infinite alternate;
+}
+
+@keyframes blinkStar{
+  0%{ opacity:0.2; }
+  50%{ opacity:1; }
+  100%{ opacity:0.2; }
+}
+
+/* タイトル */
+.title{
+  width:90%;
+  max-width:500px;
+  image-rendering: pixelated;
+  margin-bottom:60px;
+}
+
+/* メニュー */
+.menu{
+  text-align:center;
+  font-size:28px;
+  letter-spacing:4px;
+}
+
+.menu-item{
+  margin:20px 0;
+  cursor:pointer;
+  position:relative;
+}
+
+/* 選択中の点滅 */
+.menu-item::before{
+  content: "▶";
+  position:absolute;
+  left:-40px;
+  opacity:0;
+}
+
+.menu-item.active::before{
+  opacity:1;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink{
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<img src="maintitle.png" class="title" alt="メインタイトル">
+
+<div class="menu">
+  <div class="menu-item active" data-link="start.html">START</div>
+  <div class="menu-item" data-link="login.html">LOGIN</div>
+</div>
+
+<script>
+const items = document.querySelectorAll(".menu-item");
+let current = 0;
+
+// 選択移動
+document.addEventListener("keydown", (e)=>{
+
+  if(e.key === "ArrowUp"){
+    items[current].classList.remove("active");
+    current = (current - 1 + items.length) % items.length;
+    items[current].classList.add("active");
+  }
+
+  if(e.key === "ArrowDown"){
+    items[current].classList.remove("active");
+    current = (current + 1) % items.length;
+    items[current].classList.add("active");
+  }
+
+  if(e.key === "Enter"){
+    location.href = items[current].dataset.link;
+  }
+
+});
+
+// クリック対応
+items.forEach((item, index)=>{
+  item.addEventListener("click", ()=>{
+    location.href = item.dataset.link;
+  });
+});
+// 星を大量生成
+const starContainer = document.querySelector(".stars");
+
+for(let i=0; i<120; i++){  // ← 数字を増やすと星が増える
+  const star = document.createElement("div");
+  star.classList.add("star");
+
+  star.style.top = Math.random() * 100 + "%";
+  star.style.left = Math.random() * 100 + "%";
+
+  star.style.animationDelay = Math.random() * 2 + "s";
+
+  starContainer.appendChild(star);
+}
+</script>
+
+</body>
+</html>
