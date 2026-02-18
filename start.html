@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>はじめに</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  font-family:'DotGothic16', sans-serif;
+  color:white;
+  background:#191970;
+}
+
+/* 星 */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: blinkStar 2s infinite alternate;
+}
+
+@keyframes blinkStar{
+  0%{ opacity:0.2; }
+  50%{ opacity:1; }
+  100%{ opacity:0.2; }
+}
+
+/* 白い太枠 */
+.box{
+  width:80%;
+  max-width:800px;
+  height:55vh;
+  border:6px solid white;
+  padding:30px;
+  box-sizing:border-box;
+  overflow-y:auto;
+  background:rgba(0,0,0,0.4);
+  line-height:1.8;
+  font-size:16px;
+}
+
+/* ボタン共通 */
+.menu{
+  margin-top:30px;
+  text-align:center;
+  font-size:22px;
+  letter-spacing:3px;
+}
+
+.menu-item{
+  margin:15px 0;
+  cursor:pointer;
+  position:relative;
+}
+
+.menu-item::before{
+  content:"▶";
+  position:absolute;
+  left:-30px;
+  opacity:0;
+}
+
+.menu-item.active::before{
+  opacity:1;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink{
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="box" id="text"></div>
+
+<div class="menu" id="buttons">
+  <div class="menu-item" id="skipBtn">SKIP</div>
+  <div class="menu-item" id="backBtn" style="display:none;" data-link="main.html">戻る</div>
+  <div class="menu-item"
