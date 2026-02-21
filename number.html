@@ -6,100 +6,100 @@
 <title>ラッキーナンバー</title>
 
 <style>
+/* =========================
+   全体（レトロゲーム風）
+========================= */
 body{
   margin:0;
-  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
-
-  background-image:url("hakei.jpg");
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-
+  background:#000;
+  color:#fff;
+  font-family: "Press Start 2P","DotGothic16","Noto Sans JP", monospace;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   min-height:100vh;
-  color:#eee;
 }
 
-/* カード */
+/* =========================
+   メイン枠
+========================= */
 .container{
-  background:rgba(10,12,30,0.75);
-  backdrop-filter:blur(12px);
-  padding:26px;
-  border-radius:20px;
-  box-shadow:0 0 40px rgba(120,120,255,0.25);
-  width:95%;
-  max-width:420px;
-  border:1px solid rgba(255,255,255,0.08);
+  background:#000;
+  border:4px solid #fff;
+  padding:24px 20px 28px;
+  width:90%;
+  max-width:360px;
   text-align:center;
 }
 
-/* タイトル */
+/* =========================
+   タイトル
+========================= */
 h1{
-  margin-bottom:20px;
-  font-weight:600;
-  color:#dcd6ff;
-  text-shadow:0 0 10px rgba(150,150,255,0.5);
+  font-size:16px;
+  margin:0 0 20px;
+  letter-spacing:2px;
 }
 
-/* ルーレット数字 */
+/* =========================
+   数字表示
+========================= */
 #number{
   font-size:64px;
-  margin:30px 0;
+  margin:28px 0;
   font-weight:bold;
-  letter-spacing:4px;
-  text-shadow:0 0 15px rgba(255,255,255,0.8);
+  letter-spacing:6px;
 }
 
-/* 回転中 */
+/* 回転中の点滅 */
 .spinning{
-  animation:flash 0.1s infinite;
+  animation: blink 0.12s steps(1) infinite;
 }
 
-@keyframes flash{
-  0%{opacity:0.3;}
-  50%{opacity:1;}
-  100%{opacity:0.3;}
+@keyframes blink{
+  50%{ opacity:0; }
 }
 
-/* ボタン */
+/* =========================
+   ボタン
+========================= */
 button{
   width:100%;
-  padding:12px;
   margin-top:10px;
-  border-radius:12px;
-  border:none;
-  font-size:15px;
-  font-weight:bold;
+  padding:10px 0;
+  font-size:12px;
+  color:#000;
+  background:#fff;
+  border:3px solid #fff;
   cursor:pointer;
-  color:white;
-
-  background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);
-  box-shadow:0 0 20px rgba(168,85,247,0.5);
+  font-family: inherit;
 }
 
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 25px rgba(236,72,153,0.8);
+button:active{
+  background:#000;
+  color:#fff;
 }
 
-/* 戻る */
+/* =========================
+   戻るボタン
+========================= */
 .back-button{
-  text-align:center;
-  margin:25px 0 40px;
+  margin-top:24px;
 }
 
 .back-button a{
   display:inline-block;
-  padding:10px 20px;
-  border-radius:12px;
+  padding:8px 16px;
+  border:3px solid #fff;
+  color:#fff;
   text-decoration:none;
-  font-weight:bold;
-  color:white;
-  background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);
-  box-shadow:0 0 15px rgba(168,85,247,0.5);
+  font-size:12px;
+}
+
+.back-button a:active{
+  background:#fff;
+  color:#000;
 }
 </style>
 </head>
@@ -107,7 +107,7 @@ button:hover{
 <body>
 
 <div class="container">
-  <h1>ラッキーナンバー</h1>
+  <h1>LUCKY NUMBER</h1>
 
   <div id="number">?</div>
 
@@ -116,7 +116,7 @@ button:hover{
 </div>
 
 <div class="back-button">
-  <a href="index.html">トップへ戻る</a>
+  <a href="index.html">TOP</a>
 </div>
 
 <script>
