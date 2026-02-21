@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新規登録</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  font-family:'DotGothic16', sans-serif;
+  color:white;
+  background:#191970;
+}
+
+/* 星空 */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: blinkStar 2s infinite alternate;
+}
+
+@keyframes blinkStar{
+  0%{opacity:0.2;}
+  50%{opacity:1;}
+  100%{opacity:0.2;}
+}
+
+/* 登録ボックス */
+.box{
+  width:90%;
+  max-width:500px;
+  border:6px solid white;
+  padding:30px;
+  background:rgba(0,0,0,0.4);
+  box-sizing:border-box;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+label{
+  display:block;
+  margin-top:20px;
+  margin-bottom:5px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  font-family:'DotGothic16', sans-serif;
+  font-size:16px;
+  border:none;
+  outline:none;
+}
+
+.note{
+  font-size:12px;
+  opacity:0.85;
+  margin-top:5px;
+}
+
+/* OK / NG 表示 */
+.check{
+  margin-top:5px;
+  font-size:14px;
+}
+
+.ok{
+  color:#00ff90;
+}
+
+.ng{
+  color:#ff6060;
+}
+
+button{
+  margin-top:30px;
+  width:100%;
+  padding:15px;
+  font-family:'DotGothic16', sans-serif;
+  font-size:18px;
+  background:white;
+  color:#191970;
+  border:none;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:0.8;
+}
+
+.message{
+  margin-top:20px;
+  text-align:center;
+  color:yellow;
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="box">
+  <h2>新規登録</h2>
+
+  <label>メールアドレス</label>
+  <input type="email" id="email">
+
+  <label>パスワード</label>
+  <input type="password" id="password">
+  <div class="note">
+    ※ 8文字以上・大文字 / 小文字の英字・数字を含めてください
+  </div>
+  <div class="check" id="passwordCheck">NG</div>
+
+  <label>パスワード（確認）</label>
+  <input type="password" id="passwordConfirm">
+
+  <label>ニックネーム</label>
+  <input type="text" id="nickname">
+
+  <button onclick="register()">登録する</button>
+
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+
+/* 星空生成 */
+const starContainer = document.querySelector(".stars");
+for(let i=0;i<120;i++){
+  const star=document.createElement("div");
+  star.classList.add("star");
+  star.style.top=Math.random()*100+"%";
+  star.style.left=Math.random()*100+"%";
+  star.style.animationDelay=Math.random()*2+"s";
+  starContainer.appendChild(star);
+}
+
+/* パスワード入力チェック */
+const passwordInput = document.getElementById("password");
+const passwordCheck = document.getElementById("passwordCheck");
+
+const passwordRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+passwordInput.addEventListener("input", ()=>{
+  if(passwordRule.test(passwordInput.value)){
+    passwordCheck.textContent = "OK";
+    passwordCheck.className = "check ok";
+  }else{
+    passwordCheck.textContent = "NG";
+    passwordCheck.className = "check ng";
+  }
+});
+
+/* 登録処理 */
+function register(){
+
+  const email = document.getElementById("email").value;
+  const password = passwordInput.value;
+  const passwordConfirm = document.getElementById("passwordConfirm").value;
+  const nickname = document.getElementById("nickname").value;
+  const message = document.getElementById("message");
+
+  if(!email || !password || !passwordConfirm || !nickname){
+    message.textContent = "すべて入力してください";
+    return;
+  }
+
+  if(!passwordRule.test(password)){
+    message.textContent = "パスワード条件を満たしていません";
+    return;
+  }
+
+  if(password !== passwordConfirm){
+    message.textContent = "パスワードが一致しません";
+    return;
+  }
+
+  if(localStorage.getItem("user_"+email)){
+    message.textContent = "このメールは既に登録されています";
+    return;
+  }
+
+  const userData = {
+    email: email,
+    password: password,
+    nickname: nickname,
+    points: 0
+  };
+
+  localStorage.setItem("user_"+email, JSON.stringify(userData));
+
+  message.textContent = "登録完了しました！";
+
+  setTimeout(()=>{
+    location.href = "login.html";
+  },1500);
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ログイン</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  font-family:'DotGothic16', sans-serif;
+  color:white;
+  background:#191970;
+}
+
+/* 星空 */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: blinkStar 2s infinite alternate;
+}
+
+@keyframes blinkStar{
+  0%{opacity:0.2;}
+  50%{opacity:1;}
+  100%{opacity:0.2;}
+}
+
+/* ボックス */
+.box{
+  width:90%;
+  max-width:500px;
+  border:6px solid white;
+  padding:30px;
+  background:rgba(0,0,0,0.4);
+  box-sizing:border-box;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+label{
+  display:block;
+  margin-top:20px;
+  margin-bottom:5px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  font-family:'DotGothic16', sans-serif;
+  font-size:16px;
+  border:none;
+  outline:none;
+}
+
+button{
+  margin-top:30px;
+  width:100%;
+  padding:15px;
+  font-family:'DotGothic16', sans-serif;
+  font-size:18px;
+  background:white;
+  color:#191970;
+  border:none;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:0.8;
+}
+
+.message{
+  margin-top:20px;
+  text-align:center;
+  color:yellow;
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="box">
+  <h2>ログイン</h2>
+
+  <label>メールアドレス</label>
+  <input type="email" id="email">
+
+  <label>パスワード</label>
+  <input type="password" id="password">
+
+  <button onclick="login()">ログイン</button>
+
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+
+/* 星空生成 */
+const starContainer = document.querySelector(".stars");
+for(let i=0;i<120;i++){
+  const star=document.createElement("div");
+  star.classList.add("star");
+  star.style.top=Math.random()*100+"%";
+  star.style.left=Math.random()*100+"%";
+  star.style.animationDelay=Math.random()*2+"s";
+  starContainer.appendChild(star);
+}
+
+/* ログイン処理 */
+function login(){
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("message");
+
+  if(!email || !password){
+    message.textContent = "メールとパスワードを入力してください";
+    return;
+  }
+
+  const userData = localStorage.getItem("user_" + email);
+
+  if(!userData){
+    message.textContent = "登録されていません";
+    return;
+  }
+
+  const user = JSON.parse(userData);
+
+  if(user.password !== password){
+    message.textContent = "パスワードが違います";
+    return;
+  }
+
+  // ログイン成功
+  localStorage.setItem("loginUser", email);
+
+  message.textContent = "ログイン成功！";
+
+  setTimeout(()=>{
+    location.href = "mainlog.html";
+  },1000);
+}
+
+</script>
+
+</body>
+</html>

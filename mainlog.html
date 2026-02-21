@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うんラボ - Main</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  font-family:'DotGothic16', sans-serif;
+  color:white;
+  background:#191970;
+}
+
+/* 星空 */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: blinkStar 2s infinite alternate;
+}
+
+@keyframes blinkStar{
+  0%{ opacity:0.2; }
+  50%{ opacity:1; }
+  100%{ opacity:0.2; }
+}
+
+/* ポイント表示 */
+.point-display{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:26px;
+  letter-spacing:2px;
+  text-shadow:2px 2px 0px black;
+}
+
+/* タイトル */
+.title{
+  width:90%;
+  max-width:500px;
+  image-rendering: pixelated;
+  margin-bottom:60px;
+  animation: floatTitle 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatTitle{
+  from{ transform: translateY(-5px); }
+  to{ transform: translateY(5px); }
+}
+
+/* キャッチコピー */
+.catchcopy{
+  margin-top:-30px;
+  margin-bottom:40px;
+  font-size:16px;
+  line-height:1.8;
+  text-align:center;
+  max-width:600px;
+  padding:0 20px;
+  opacity:0.85;
+}
+
+/* メニュー */
+.menu{
+  text-align:center;
+  font-size:28px;
+  letter-spacing:4px;
+}
+
+.menu-item{
+  margin:25px 0;
+  cursor:pointer;
+  position:relative;
+}
+
+.menu-item::before{
+  content:"▶";
+  position:absolute;
+  left:-40px;
+  opacity:0;
+}
+
+.menu-item.active::before{
+  opacity:1;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink{
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<!-- ポイント表示 -->
+<div class="point-display" id="pointDisplay">P=00000</div>
+
+<img src="maintitle.png" class="title" alt="メインタイトル">
+
+<div class="catchcopy">
+  今日の運勢を手がかりに、あなたの一日を心地よく始めてみませんか。<br>
+  小さな気づきが、今日という時間を整えてくれます。
+</div>
+
+<div class="menu">
+  <div class="menu-item active" data-link="fortune.html">今日の運勢</div>
+  <div class="menu-item" data-link="shrine.html">おみくじ</div>
+  <div class="menu-item" data-link="number.html">ラッキーナンバー</div>
+</div>
+
+<script>
+
+/* =====================
+   星空生成
+===================== */
+const starContainer = document.querySelector(".stars");
+for(let i=0;i<120;i++){
+  const star=document.createElement("div");
+  star.classList.add("star");
+  star.style.top=Math.random()*100+"%";
+  star.style.left=Math.random()*100+"%";
+  star.style.animationDelay=Math.random()*2+"s";
+  starContainer.appendChild(star);
+}
+
+/* =====================
+   ポイント管理
+===================== */
+
+// 初回アクセス時は0ポイントを作る
+if(localStorage.getItem("points") === null){
+  localStorage.setItem("points", 0);
+}
+
+function updatePointDisplay(){
+  let p = parseInt(localStorage.getItem("points"));
+  document.getElementById("pointDisplay").textContent =
+    "P=" + String(p).padStart(5, "0");
+}
+
+updatePointDisplay();
+
+/* =====================
+   メニュー操作
+===================== */
+
+const items = document.querySelectorAll(".menu-item");
+let current = 0;
+
+document.addEventListener("keydown", (e)=>{
+
+  if(e.key === "ArrowUp"){
+    items[current].classList.remove("active");
+    current = (current - 1 + items.length) % items.length;
+    items[current].classList.add("active");
+  }
+
+  if(e.key === "ArrowDown"){
+    items[current].classList.remove("active");
+    current = (current + 1) % items.length;
+    items[current].classList.add("active");
+  }
+
+  if(e.key === "Enter"){
+    location.href = items[current].dataset.link;
+  }
+});
+
+// クリック対応
+items.forEach(item=>{
+  item.addEventListener("click", ()=>{
+    location.href = item.dataset.link;
+  });
+});
+
+</script>
+
+</body>
+</html>
