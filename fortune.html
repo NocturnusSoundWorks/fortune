@@ -421,6 +421,18 @@ fetch("luckyitems.json")
   .then(data => {
     luckyItems = data;
   });
+function goTop() {
+  const loginUser = localStorage.getItem("loginUser");
+
+  if (loginUser) {
+    // ログインしている場合
+    location.href = "mainlog.html";
+  } else {
+    // ログインしていない場合
+    location.href = "main.html";
+  }
+}
+
 function getZodiac(month, day) {
   if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "牡羊座";
   if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "牡牛座";
@@ -773,7 +785,7 @@ function makeStars(num) {
 </script>
 </div>
 <div class="back-button">
-  <a href="index.html">トップへ戻る</a>
+  <a href="javascript:void(0);" onclick="goTop()">トップへ戻る</a>
 </div>
 </body>
 </html>
