@@ -380,6 +380,20 @@ body {
 
   
 <script>
+<script>
+// =======================
+// ログイン判定
+// =======================
+const loginUser = localStorage.getItem("loginUser");
+
+if (loginUser) {
+  // ログインしている → ログイン後トップ
+  location.href = "mainlog.html";
+} else {
+  // 未ログイン → 通常トップ
+  location.href = "main.html";
+}
+  
 let luckyItems = [];
 fetch("luckyitems.json")
   .then(res => res.json())
