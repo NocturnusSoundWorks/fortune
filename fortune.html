@@ -124,7 +124,7 @@ button {
   background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
   box-shadow: 0 0 20px rgba(168,85,247,0.5);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-　margin-top: 14px; 
+  margin-top: 14px;
 }
 
 button:hover {
@@ -688,8 +688,13 @@ return { ...base, item: randomItem, stars };
 
 function fortune() {
 
-  const name = document.getElementById("name").value;
-
+  const output = document.getElementById("output");
+output.style.opacity = "0";
+output.style.animation = "none";
+output.offsetHeight; // 再描画
+output.style.animation = "fadeInUp 3.2s ease forwards";
+  
+const name = document.getElementById("name").value;
 const year = document.getElementById("year").value;
 const month = document.getElementById("month").value;
 const day = document.getElementById("day").value;
@@ -763,36 +768,6 @@ document.querySelector("button").style.display = "none";
 
 function makeStars(num) {
   return "★".repeat(num) + "☆".repeat(5 - num);
-}
-
-// ===== セレクトボックスに数字を入れる =====
-const yearSelect = document.getElementById("year");
-const monthSelect = document.getElementById("month");
-const daySelect = document.getElementById("day");
-
-// 年（例：1950〜今年）
-const thisYear = new Date().getFullYear();
-for (let y = thisYear; y >= 1950; y--) {
-  const option = document.createElement("option");
-  option.value = y;
-  option.textContent = y + "年";
-  yearSelect.appendChild(option);
-}
-
-// 月
-for (let m = 1; m <= 12; m++) {
-  const option = document.createElement("option");
-  option.value = m;
-  option.textContent = m + "月";
-  monthSelect.appendChild(option);
-}
-
-// 日
-for (let d = 1; d <= 31; d++) {
-  const option = document.createElement("option");
-  option.value = d;
-  option.textContent = d + "日";
-  daySelect.appendChild(option);
 }
 
 </script>
