@@ -380,18 +380,39 @@ body {
 
   
 <script>
-<script>
 // =======================
-// ログイン判定
+// ログイン判定（未ログインのみ弾く）
 // =======================
 const loginUser = localStorage.getItem("loginUser");
-
-if (loginUser) {
-  // ログインしている → ログイン後トップ
-  location.href = "mainlog.html";
-} else {
-  // 未ログイン → 通常トップ
+if (!loginUser) {
   location.href = "main.html";
+}
+
+// =======================
+// 生年月日 select 初期化
+// =======================
+const yearSelect = document.getElementById("year");
+for (let y = 1950; y <= new Date().getFullYear(); y++) {
+  const opt = document.createElement("option");
+  opt.value = y;
+  opt.textContent = y;
+  yearSelect.appendChild(opt);
+}
+
+const monthSelect = document.getElementById("month");
+for (let m = 1; m <= 12; m++) {
+  const opt = document.createElement("option");
+  opt.value = m;
+  opt.textContent = m;
+  monthSelect.appendChild(opt);
+}
+
+const daySelect = document.getElementById("day");
+for (let d = 1; d <= 31; d++) {
+  const opt = document.createElement("option");
+  opt.value = d;
+  opt.textContent = d;
+  daySelect.appendChild(opt);
 }
   
 let luckyItems = [];
