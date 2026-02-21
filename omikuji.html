@@ -76,7 +76,7 @@ body{
 <div id="result"></div>
 <div id="caption"></div>
 <div id="back">
-  <a href="index.html">トップへ戻る</a>
+  <a href="#" id="backLink">トップへ戻る</a>
 </div>
 
 <script>
@@ -141,7 +141,16 @@ function typeWriter(text, element, index){
     document.getElementById("back").style.opacity = "1";
   }
 }
+// 戻るボタンのリンク先をログイン状態で切り替える
+const backLink = document.getElementById("backLink");
 
+if (localStorage.getItem("loginUser")) {
+  // ログインしている
+  backLink.href = "mainlog.html";
+} else {
+  // ログインしていない
+  backLink.href = "main.html";
+}
 
 </script>
 
