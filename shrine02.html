@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>占い館へ…</title>
+
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  background:black;
+}
+
+/* 背景 */
+.game{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  background:url("sabaku.jpg") center/cover no-repeat;
+}
+
+/* 鳥居 */
+.torii{
+  position:absolute;
+  top:80px;
+  left:50%;
+  transform:translateX(-50%);
+  width:120px;
+}
+
+/* キャラクター */
+.player{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100px;
+  image-rendering: pixelated; /* ファミコン風 */
+}
+
+/* 暗転 */
+.fade{
+  position:fixed;
+  inset:0;
+  background:black;
+  opacity:0;
+  transition:1s;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+  <img src="torii.png" class="torii">
+  <img src="player.png" class="player" id="player">
+</div>
+
+<div class="fade" id="fade"></div>
+
+<script>
+const player = document.getElementById("player");
+const fade = document.getElementById("fade");
+
+let position = 0;
+
+const walk = setInterval(() => {
+  position += 3;
+  player.style.bottom = position + "px";
+
+  // 鳥居の位置に到達したら停止
+  if(position > 400){
+    clearInterval(walk);
+
+    // 暗転
+    fade.style.opacity = 1;
+
+    setTimeout(() => {
+      location.href = "fortune.html";
+    }, 1000);
+  }
+}, 30);
+</script>
+
+</body>
+</html>
