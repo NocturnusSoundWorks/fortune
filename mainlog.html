@@ -130,6 +130,7 @@ body{
   <div class="menu-item active" data-link="shrine02.html">今日の運勢</div>
   <div class="menu-item" data-link="shrine.html">おみくじ</div>
   <div class="menu-item" data-link="number.html">ラッキーナンバー</div>
+  <div class="menu-item logout">LOGOUT</div>
 </div>
 
 <script>
@@ -189,11 +190,19 @@ document.addEventListener("keydown", (e)=>{
     location.href = items[current].dataset.link;
   }
 });
+function logout(){
+  localStorage.removeItem("loginUser"); // ログイン情報削除
+  location.href = "main.html";          // 非ログイン用トップへ
+}
 
 // クリック対応
 items.forEach(item=>{
   item.addEventListener("click", ()=>{
-    location.href = item.dataset.link;
+    if(item.classList.contains("logout")){
+      logout();
+    }else{
+      location.href = item.dataset.link;
+    }
   });
 });
 
