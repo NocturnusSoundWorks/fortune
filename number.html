@@ -116,7 +116,7 @@ button:active{
 </div>
 
 <div class="back-button">
-  <a href="index.html">TOP</a>
+  <a href="javascript:void(0)" onclick="goTop()">TOPへ戻る</a>
 </div>
 
 <script>
@@ -138,6 +138,18 @@ function stop(){
   clearInterval(timer);
   el.classList.remove("spinning");
 }
+/* =========================
+   TOPへ戻る（ログイン判定）
+========================= */
+function goTop(){
+  const loginUser = localStorage.getItem("loginUser");
+
+  if(loginUser){
+    location.href = "mainlog.html";
+  }else{
+    location.href = "main.html";
+  }
+}   
 </script>
 
 </body>
